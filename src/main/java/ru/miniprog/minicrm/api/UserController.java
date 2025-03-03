@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.miniprog.minicrm.model.User;
+import ru.miniprog.minicrm.dto.UserCrmDTO;
+import ru.miniprog.minicrm.model.UserCrm;
 import ru.miniprog.minicrm.service.UserService;
 
 @RestController
@@ -13,14 +14,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-//    @GetMapping("/")
-//    public String index() {
-//        return "Hello World";
-//    }
-
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        User registeredUser = userService.registerUser(user);
+    public ResponseEntity<UserCrm> registerUser(@RequestBody UserCrmDTO user) {
+        UserCrm registeredUser = new UserCrm();
+        registeredUser.setUsername(user.getUsername());
+        registeredUser.setPassword(user.getPassword());
+        registeredUser.setEmail(user.getEmail());
+        userService.registerUser(registeredUser);
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }
 }

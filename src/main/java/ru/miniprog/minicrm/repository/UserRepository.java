@@ -1,8 +1,10 @@
 package ru.miniprog.minicrm.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.miniprog.minicrm.model.User;
+import org.springframework.stereotype.Repository;
+import ru.miniprog.minicrm.model.UserCrm;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
+@Repository
+public interface UserRepository extends JpaRepository<UserCrm, Integer> {
     // Дополнительные методы, если необходимо
 }
