@@ -11,16 +11,16 @@ import ru.miniprog.minicrm.service.UserService;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
+//    @Autowired
+//    private UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<UserCrm> registerUser(@RequestBody UserCrmDTO user) {
-        UserCrm registeredUser = new UserCrm();
-        registeredUser.setUsername(user.getUsername());
-        registeredUser.setPassword(user.getPassword());
-        registeredUser.setEmail(user.getEmail());
-        userService.registerUser(registeredUser);
-        return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
-    }
+//    @PostMapping("/register")
+//    public ResponseEntity<UserCrm> registerUser(@RequestBody UserCrmDTO user) {
+//        UserCrm registeredUser = new UserCrm();
+//        registeredUser.setUsername(user.getUsername());
+//        registeredUser.setPassword(user.getPassword());
+//        registeredUser.setEmail(user.getEmail());
+//        userService.registerUser(registeredUser);
+//        return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
+//    }
 }
