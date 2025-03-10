@@ -10,7 +10,6 @@ const RegistrationForm = () => {
   });
   const [message, setMessage] = useState('');
 
-  // Обработчик изменения полей формы
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -19,21 +18,17 @@ const RegistrationForm = () => {
     });
   };
 
-  // Обработчик отправки формы
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     console.log('Данные формы перед отправкой:', formData);
 
     try {
-      // Отправка данных на сервер
       const response = await axios.post('http://localhost:8080/user/register', formData);
 
-      // Обработка успешного ответа
       setMessage('Регистрация прошла успешно!');
       console.log('Ответ сервера:', response.data);
 
-      // Очистка формы
       setFormData({
         username: '',
         email: '',

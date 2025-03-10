@@ -31,7 +31,6 @@ public class UserService {
      */
     public UserCrm create(UserCrm user) {
         if (repository.existsByUsername(user.getUsername())) {
-            // Заменить на свои исключения
             throw new RuntimeException("Пользователь с таким именем уже существует");
         }
 
@@ -69,7 +68,6 @@ public class UserService {
      * @return текущий пользователь
      */
     public UserCrm getCurrentUser() {
-        // Получение имени пользователя из контекста Spring Security
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         return getByUsername(username);
     }
