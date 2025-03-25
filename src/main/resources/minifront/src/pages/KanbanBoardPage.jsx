@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import '../style/Kanban.css'
+import { Box, Button, Card, CardContent, Divider, Paper, Stack, TextField, Typography } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add';
 
 const KanbanBoardPage = () => {
   const [columns, setColumns] = useState([])
@@ -8,6 +10,8 @@ const KanbanBoardPage = () => {
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [newTaskDescription, setNewTaskDescription] = useState('')
   const [selectedColumnId, setSelectedColumnId] = useState('')
+  const [isAddingTask, setIsAddingTask] = useState(false)
+  const [isAddingColumn, setIsAddingColumn] = useState(false);
 
   const fetchStatus = (() => {
     fetch('/kanban/status')
@@ -63,6 +67,7 @@ const KanbanBoardPage = () => {
       .then((newColumn) => {
         setColumns([...columns, newColumn])
         setNewColumnName('')
+        setIsAddingColumn(false);
       })
       .catch((error) => console.error('Error adding column:', error))
   }
@@ -81,80 +86,153 @@ const KanbanBoardPage = () => {
     })
       .then((response) => response.json())
       .then((newTask) => {
-        const updatedColumns = columns.map((column) =>
-          column.id === newTask.status_id
-            ? { ...column, tasks: [...column.tasks, newTask] }
-            : column
-        )
-        setColumns(updatedColumns)
+        fetchStatus()
+        fetchTasks()
         setNewTaskTitle('')
         setNewTaskDescription('')
+        setIsAddingTask(false)
       })
       .catch((error) => console.error('Error adding task:', error))
   }
 
   return (
-    <div className="kanban-board">
-      <div className="kanban-controls">
-        <input
-          type="text"
-          value={newColumnName}
-          onChange={(e) => setNewColumnName(e.target.value)}
-          placeholder="New Column Name"
-        />
-        <button onClick={addColumn}>Add Column</button>
-        <br />
-
-        <select
-          value={selectedColumnId}
-          onChange={(e) => setSelectedColumnId(e.target.value)}
-        >
-          <option value="">Select Column</option>
-          {columns.map((column) => (
-            <option key={column.id} value={column.id}>
-              {column.name}
-            </option>
-          ))}
-        </select>
-        <input
-          type="text"
-          value={newTaskTitle}
-          onChange={(e) => setNewTaskTitle(e.target.value)}
-          placeholder="New Task Title"
-        />
-        <input
-          type="text"
-          value={newTaskDescription}
-          onChange={(e) => setNewTaskDescription(e.target.value)}
-          placeholder="New Task Description"
-        />
-        <button onClick={addTask}>Add Task</button>
-      </div>
+    <Stack direction="row" spacing={3} sx={{
+      overflowX: 'auto',
+      width: '100%',
+      height: '95vh',
+      display: 'flex'
+    }}>
       {columns.map((column) => (
-          <div
+          <Paper
             key={column.id}
-            className="kanban-column"
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => onDrop(e, column.id)}
+            sx={{
+              overflowY: 'auto',
+              height: '99%',
+              display: 'flex',
+              flexDirection: 'column',
+              width: '380px',
+              flexShrink: 0
+            }}
           >
-            <h2>{column.name}</h2>
-            {tasks.filter((t) => t.status.id === column.id).map((task) =>
-              (
-                <div
-                  key={task.id}
-                  className="kanban-task"
-                  draggable
-                  onDragStart={(e) => onDragStart(e, task.id)}
+            <Typography component="h5" variant="h5" sx={{ margin: 2 }}>{column.name}</Typography>
+            <Divider />
+            <Box
+              sx={{
+                overflowY: 'auto',
+                flexGrow: 1
+              }}
+            >
+              {tasks.filter((t) => t.status.id === column.id).map((task) =>
+                (
+                  <Card
+                    variant="outlined"
+                    key={task.id}
+                    draggable
+                    onDragStart={(e) => onDragStart(e, task.id)}
+                    sx={{ margin: 1 }}
+                  >
+                    <CardContent>
+                      <Typography variant="h6" component="h6">{task.title}</Typography>
+                      <Typography gutterBottom
+                                  sx={{ color: 'text.secondary', fontSize: 14 }}>{task.description}</Typography>
+                    </CardContent>
+                  </Card>
+                ))}
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 2,
+              }}
+            >
+              {isAddingTask && selectedColumnId === column.id ? (
+                <>
+                  <TextField
+                    label="Task Title"
+                    value={newTaskTitle}
+                    onChange={(e) => setNewTaskTitle(e.target.value)}
+                    sx={{ marginBottom: 2 }}
+                  />
+                  <TextField
+                    label="Task Description"
+                    value={newTaskDescription}
+                    onChange={(e) => setNewTaskDescription(e.target.value)}
+                    sx={{ marginBottom: 2 }}
+                  />
+                  <Button variant="contained" onClick={() => addTask(column.id)}>
+                    Add Task
+                  </Button>
+                  <Button variant="outlined" onClick={() => setIsAddingTask(false)}>
+                    Cancel
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    setIsAddingTask(true);
+                    setSelectedColumnId(column.id);
+                  }}
+                  sx={{ width: '100%', height: '50px' }}
                 >
-                  <h3>{task.title}</h3>
-                  <p>{task.description}</p>
-                </div>
-              )
-            )}
-          </div>
-        )
-      )}
-    </div>
+                  Add Task
+                </Button>
+              )}
+            </Box>
+          </Paper>
+        ))}
+      <Paper
+        sx={{
+          border: '2px dashed grey',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '380px',
+          height: '98%',
+          flexShrink: 0,
+          cursor: 'pointer',
+        }}
+        onClick={(e) => {
+          if (!isAddingColumn) {
+            setIsAddingColumn(true);
+          }
+          e.stopPropagation();
+        }}
+      >
+        {isAddingColumn ? (
+          <>
+            <TextField
+              label="Column Name"
+              value={newColumnName}
+              onChange={(e) => setNewColumnName(e.target.value)}
+              sx={{ marginBottom: 2, width: '100%' }}
+            />
+            <Button variant="contained" onClick={addColumn}>
+              Add Column
+            </Button>
+            <Button variant="outlined" onClick={(e) => {
+              e.stopPropagation();
+              setIsAddingColumn(false);
+            }}>
+              Cancel
+            </Button>
+          </>
+        ) : (
+          <>
+            <AddIcon sx={{ fontSize: 40, color: 'grey' }} />
+            <Typography variant="body1" color="grey">
+              Add Column
+            </Typography>
+          </>
+        )}
+      </Paper>
+    </Stack>
   )
 }
 

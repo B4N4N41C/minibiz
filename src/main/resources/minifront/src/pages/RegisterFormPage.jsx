@@ -1,82 +1,92 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Button, Container, TextField } from '@mui/material'
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
 const RegisterFormPage = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    email: '',
-  });
+    email: ''
+  })
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+      [e.target.name]: e.target.value
+    })
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
       const response = await fetch('http://localhost:8080/auth/sign-up', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData),
-      });
+        body: JSON.stringify(formData)
+      })
 
       if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('token', data.token);
-        alert('Registration successful!');
+        const data = await response.json()
+        localStorage.setItem('token', data.token)
+        alert('Registration successful!')
       } else {
-        alert('Registration failed!');
+        alert('Registration failed!')
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred during registration.');
+      console.error('Error:', error)
+      alert('An error occurred during registration.')
     }
-  };
+  }
 
   const handleLoginRedirect = () => {
-    navigate('/login');
-  };
+    navigate('/login')
+  }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="username"
-        value={formData.username}
-        onChange={handleChange}
-        placeholder="Username"
-        required
-      />
-      <input
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        placeholder="Email"
-        required
-      />
-      <input
-        type="password"
-        name="password"
-        value={formData.password}
-        onChange={handleChange}
-        placeholder="Password"
-        required
-      />
-      <button type="submit">Register</button>
-      <button type="button" onClick={handleLoginRedirect}>
-        Go to Login
-      </button>
-    </form>
-  );
-};
+    <Container maxWidth="sm">
+      <form onSubmit={handleSubmit}>
+        <TextField
+          className="w-full"
+          type="text"
+          name="username"
+          label="Username"
+          value={formData.username}
+          onChange={handleChange}
+          sx={{ margin: 2, width: 1 }}
+          required
+        />
+        <TextField
+          className="w-full mb-10"
+          type="email"
+          name="email"
+          label="Email"
+          value={formData.email}
+          onChange={handleChange}
+          sx={{ margin: 2, width: 1 }}
+          required
+        />
+        <TextField
+          className="w-full mb-10"
+          type="password"
+          label="Password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          sx={{ margin: 2, width: 1 }}
+          required
+        />
+        <Button variant="contained" type="submit" sx={{ margin: 2, width: 1 }}>Register</Button>
+        <Button variant="outlined" onClick={handleLoginRedirect} sx={{ margin: 2, width: 1 }}>
+          Go to Login
+        </Button>
+      </form>
+    </Container>
+  )
+}
 
-export default RegisterFormPage;
+export default RegisterFormPage

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.miniprog.minicrm.api.payload.NewStatusPayload;
 import ru.miniprog.minicrm.api.payload.NewTaskPayload;
 import ru.miniprog.minicrm.api.payload.UpdateTaskStatusPayload;
 import ru.miniprog.minicrm.model.Status;
@@ -32,8 +33,10 @@ public class KanbanBoardController {
 
     @Operation(summary = "Добавление статусов")
     @PostMapping("/status")
-    public Status addStatus(@RequestBody Status status){
-        return statusRepository.save(status);
+    public Status addStatus(@RequestBody NewStatusPayload status){
+        Status newStatus = new Status();
+        newStatus.setName(status.name());
+        return statusRepository.save(newStatus);
     }
 
     @Operation(summary = "Получение статусов")

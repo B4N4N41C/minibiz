@@ -11,5 +11,4 @@ public class MinicrmApplication {
     public static void main(String[] args) {
         SpringApplication.run(MinicrmApplication.class, args);
     }
-
 }
