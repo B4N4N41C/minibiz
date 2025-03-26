@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Container, TextField } from '@mui/material'
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
 const RegisterFormPage = () => {
   const [formData, setFormData] = useState({

@@ -2,7 +2,6 @@ import {Routes, Route } from 'react-router-dom'
 import RegisterFormPage from './pages/RegisterFormPage.jsx'
 import LoginFormPage from './pages/LoginFormPage.jsx'
 import KanbanBoardPage from './pages/KanbanBoardPage.jsx'
-import './style/App.css'
 
 function App() {
   return (

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import '../style/Kanban.css'
 import { Box, Button, Card, CardContent, Divider, Paper, Stack, TextField, Typography } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 
