@@ -29,7 +29,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
-.vscode/
-src/main/resources/minifront/dist
-src/main/resources/static/assets
+
+!/.vscode/
+!/src/main/resources/static/assets/
+!/src/main/resources/static/index.html
+!/src/main/resources/static/vite.svg
+!/src/main/resources/static/favicon.ico

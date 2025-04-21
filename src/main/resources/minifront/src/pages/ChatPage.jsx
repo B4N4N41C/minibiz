@@ -151,9 +151,10 @@ const ChatPage = () => {
 
 	const handleCreateChat = async () => {
 		try {
-			const response = await axios.post("/createChat", {
+			selectedUsers.push((allUsers.find(u => u.username === userData.username)).id)
+			const response = await axios.post("/chat/creat", {
 				name: newChatName,
-				creator: userData.username,
+				typeChat: "USER_CHAT",
 				users: selectedUsers,
 			});
 			if (response.status === 200) {
@@ -164,6 +165,14 @@ const ChatPage = () => {
 			console.error("Error creating chat:", error);
 		}
 	};
+
+	const getUsernames = (userIds) => {
+		return userIds.map(id => {
+			const user = allUsers.find(user => user.id === id);
+			return user ? user.username : '';
+		});
+	};
+
 
 	return (
 		<>
@@ -277,10 +286,10 @@ const ChatPage = () => {
 							multiple
 							value={selectedUsers}
 							onChange={(e) => setSelectedUsers(e.target.value)}
-							renderValue={(selected) => selected.join(", ")}
+							renderValue={(selected) => getUsernames(selected).join(", ")}
 						>
 							{allUsers.map((user) => (
-								<MenuItem key={user.id} value={user.username}>
+								<MenuItem key={user.id} value={user.id}>
 									{user.username}
 								</MenuItem>
 							))}
