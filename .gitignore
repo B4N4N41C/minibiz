@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+src/main/resources/minifront/dist
+src/main/resources/static/assets

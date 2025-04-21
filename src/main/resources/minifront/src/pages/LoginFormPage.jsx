@@ -1,79 +1,139 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Button, Container, TextField } from '@mui/material'
+// src/main/resources/minifront/src/pages/LoginPage.jsx
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import {
+	Box,
+	TextField,
+	Button,
+	Typography,
+	Paper,
+	Alert,
+	Link,
+	Container,
+} from "@mui/material";
+import { authService } from "../services/authService";
 
-const LoginFormPage = () => {
-  const navigate = useNavigate()
+const LoginPage = () => {
+	const navigate = useNavigate();
+	const location = useLocation();
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
+	const [loading, setLoading] = useState(false);
 
-  const [formData, setFormData] = useState({
-    username: '',
-    password: ''
-  })
+	const handleLogin = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+		setError("");
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
+		try {
+			console.log("Отправка запроса на вход...");
+			const data = await authService.login(username, password);
+			console.log("Получен ответ:", data);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-      const response = await fetch('http://localhost:8080/auth/sign-in', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
+			if (data.token) {
+				localStorage.setItem("token", data.token);
+				localStorage.setItem("username", username);
+				const from = location.state?.from || "/chat";
+				navigate(from, { replace: true });
+			} else {
+				setError("Неверный формат ответа от сервера");
+			}
+		} catch (err) {
+			console.error("Ошибка при входе:", err);
+			setError(err.message || "Неверное имя пользователя или пароль");
+		} finally {
+			setLoading(false);
+		}
+	};
 
-      if (response.ok) {
-        const data = await response.json()
-        localStorage.setItem('token', data.token)
-        alert('Login sussfull!')
-        navigate('/kanban')
-      } else {
-        alert('Login failed!')
-      }
-    } catch (error) {
-      console.error('Error:', error)
-      alert('An error occurred during login.')
-    }
-  }
+	const handleRegisterClick = (e) => {
+		e.preventDefault();
+		navigate("/register");
+	};
 
-  const handleRegisterRedirect = () => {
-    navigate('/')
-  }
+	return (
+		<Container component="main" maxWidth="xs">
+			<Box
+				sx={{
+					marginTop: 8,
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+				}}
+			>
+				<Paper
+					elevation={3}
+					sx={{
+						p: 4,
+						width: "100%",
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "center",
+					}}
+				>
+					<Typography component="h1" variant="h5">
+						Вход в систему
+					</Typography>
 
-  return (
-    <Container maxWidth="sm">
-      <form onSubmit={handleSubmit}>
-        <TextField
-          type="text"
-          label="Username"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          sx={{ margin: 2, width: 1 }}
-          required
-        />
-        <TextField
-          type="password"
-          label="Password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          sx={{ margin: 2, width: 1 }}
-          required
-        />
-        <Button variant="contained" type="submit" sx={{ margin: 2, width: 1 }}>Login</Button>
-        <Button variant="outlined" onClick={handleRegisterRedirect} sx={{ margin: 2, width: 1 }}>
-          Go to Register
-        </Button>
-      </form>
-    </Container>
-  )
-}
+					{error && (
+						<Alert severity="error" sx={{ mt: 2, width: "100%" }}>
+							{error}
+						</Alert>
+					)}
 
-export default LoginFormPage
+					<Box
+						component="form"
+						onSubmit={handleLogin}
+						sx={{ mt: 1, width: "100%" }}
+					>
+						<TextField
+							margin="normal"
+							required
+							fullWidth
+							id="username"
+							label="Имя пользователя"
+							name="username"
+							autoComplete="username"
+							autoFocus
+							value={username}
+							onChange={(e) => setUsername(e.target.value)}
+						/>
+						<TextField
+							margin="normal"
+							required
+							fullWidth
+							name="password"
+							label="Пароль"
+							type="password"
+							id="password"
+							autoComplete="current-password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+						/>
+						<Button
+							type="submit"
+							fullWidth
+							variant="contained"
+							sx={{ mt: 3, mb: 2 }}
+							disabled={loading}
+						>
+							{loading ? "Вход..." : "Войти"}
+						</Button>
+						<Box sx={{ textAlign: "center" }}>
+							<Link
+								component="button"
+								variant="body2"
+								onClick={handleRegisterClick}
+							>
+								{"Нет аккаунта? Зарегистрироваться"}
+							</Link>
+						</Box>
+					</Box>
+				</Paper>
+			</Box>
+		</Container>
+	);
+};
+
+export default LoginPage;

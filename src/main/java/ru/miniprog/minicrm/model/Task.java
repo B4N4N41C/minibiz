@@ -7,8 +7,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
