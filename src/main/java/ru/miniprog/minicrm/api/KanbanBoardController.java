@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.miniprog.minicrm.api.payload.NewStatusPayload;
 import ru.miniprog.minicrm.api.payload.NewTaskPayload;
+import ru.miniprog.minicrm.api.payload.UpdateTaskPayload;
 import ru.miniprog.minicrm.api.payload.UpdateTaskStatusPayload;
 import ru.miniprog.minicrm.model.Status;
 import ru.miniprog.minicrm.model.Task;
@@ -39,7 +40,16 @@ public class KanbanBoardController {
         return statusRepository.save(newStatus);
     }
 
-    @Operation(summary = "Получение статусов")
+    @Operation(summary = "Редактирование статусов")
+    @PatchMapping("/task/{id}")
+    public Task updateTask(@PathVariable Long id, @RequestBody UpdateTaskPayload taskPayload){
+        Task task = taskRepository.findById(id).get();
+        task.setTitle(taskPayload.title());
+        task.setDescription(taskPayload.description());
+        return taskRepository.save(task);
+    }
+
+    @Operation(summary = "Получение задач")
     @GetMapping("/task")
     public List<Task> getAllTask(){
         return taskRepository.findAll();

@@ -291,7 +291,7 @@ const ChatPage = () => {
 							onChange={(e) => setSelectedUsers(e.target.value)}
 							renderValue={(selected) => getUsernames(selected).join(", ")}
 						>
-							{allUsers.map((user) => (
+							{allUsers.filter(u => u.username !== userData.username).map((user) => (
 								<MenuItem key={user.id} value={user.id}>
 									{user.username}
 								</MenuItem>

@@ -5,12 +5,15 @@ import {
 	Card,
 	CardContent,
 	Divider,
+	Drawer,
+	IconButton,
 	Paper,
 	Stack,
 	TextField,
 	Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import NavBar from "../components/NavBar";
 import axios from "axios";
 
@@ -23,6 +26,10 @@ const KanbanBoardPage = () => {
 	const [selectedColumnId, setSelectedColumnId] = useState("");
 	const [isAddingTask, setIsAddingTask] = useState(false);
 	const [isAddingColumn, setIsAddingColumn] = useState(false);
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [selectedTask, setSelectedTask] = useState(null);
+	const [editedTaskTitle, setEditedTaskTitle] = useState("");
+	const [editedTaskDescription, setEditedTaskDescription] = useState("");
 
 	const fetchStatus = async () => {
 		try {
@@ -94,6 +101,31 @@ const KanbanBoardPage = () => {
 		}
 	};
 
+	const openDrawer = (task) => {
+		setSelectedTask(task);
+		setEditedTaskTitle(task.title);
+		setEditedTaskDescription(task.description);
+		setIsDrawerOpen(true);
+	};
+
+	const closeDrawer = () => {
+		setIsDrawerOpen(false);
+		setSelectedTask(null);
+	};
+
+	const updateTask = async () => {
+		try {
+			await axios.patch(`/kanban/task/${selectedTask.id}`, {
+				title: editedTaskTitle,
+				description: editedTaskDescription,
+			});
+			fetchTasks();
+			closeDrawer();
+		} catch (error) {
+			console.error("Error updating task:", error);
+		}
+	};
+
 	return (
 		<>
 			<NavBar />
@@ -141,7 +173,7 @@ const KanbanBoardPage = () => {
 										key={task.id}
 										draggable
 										onDragStart={(e) => onDragStart(e, task.id)}
-										sx={{ margin: 1 }}
+										sx={{ margin: 1, position: "relative" }}
 									>
 										<CardContent>
 											<Typography variant="h6" component="h6">
@@ -154,6 +186,12 @@ const KanbanBoardPage = () => {
 												{task.description}
 											</Typography>
 										</CardContent>
+										<IconButton
+											sx={{ position: "absolute", top: 8, right: 8 }}
+											onClick={() => openDrawer(task)}
+										>
+											<MoreVertIcon />
+										</IconButton>
 									</Card>
 								))}
 						</Box>
@@ -259,6 +297,33 @@ const KanbanBoardPage = () => {
 					)}
 				</Paper>
 			</Stack>
+			<Drawer anchor="right" open={isDrawerOpen} onClose={closeDrawer}>
+				<Box sx={{ width: 380, padding: 2 }}>
+					<Typography variant="h6" component="h6">
+						Edit Task
+					</Typography>
+					<TextField
+						label="Task Title"
+						value={editedTaskTitle}
+						onChange={(e) => setEditedTaskTitle(e.target.value)}
+						sx={{ marginBottom: 2 }}
+						fullWidth
+					/>
+					<TextField
+						label="Task Description"
+						value={editedTaskDescription}
+						onChange={(e) => setEditedTaskDescription(e.target.value)}
+						sx={{ marginBottom: 2 }}
+						fullWidth
+					/>
+					<Button variant="contained" onClick={updateTask}>
+						Save
+					</Button>
+					<Button variant="outlined" onClick={closeDrawer}>
+						Cancel
+					</Button>
+				</Box>
+			</Drawer>
 		</>
 	);
 };

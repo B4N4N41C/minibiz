@@ -4,6 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChatIcon from "@mui/icons-material/Chat";
 import ViewKanbanIcon from "@mui/icons-material/ViewKanban";
 import LogoutIcon from "@mui/icons-material/Logout";
+import EqualizerIcon from '@mui/icons-material/Equalizer';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
@@ -22,6 +23,10 @@ const NavBar = () => {
 	const handleLogout = () => {
 		authService.logout(navigate);
 	};
+
+	// const handleStatisticsRedirect = () => {
+	// 	navigate("/statistics");
+	// };
 
 	const toggleDrawer = (newOpen) => () => {
 		setOpen(newOpen);
@@ -51,6 +56,14 @@ const NavBar = () => {
 			</AppBar>
 			<Drawer open={open} onClose={toggleDrawer(false)}>
 				<Box sx={{ minWidth: 220 }}>
+					{/*<Button*/}
+					{/*	onClick={() => handleChatRedirect()}*/}
+					{/*	variant="text"*/}
+					{/*	startIcon={<EqualizerIcon />}*/}
+					{/*	sx={{ minWidth: 1 / 1 }}*/}
+					{/*>*/}
+					{/*	Статистика*/}
+					{/*</Button>*/}
 					<Button
 						onClick={() => handleKanbanRedirect()}
 						variant="text"
