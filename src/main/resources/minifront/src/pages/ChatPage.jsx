@@ -42,10 +42,13 @@ const ChatPage = () => {
 
 	useEffect(() => {
 		console.log("конект");
-		connect();
 		getAllChatRoom();
 		getAllUsers();
 	}, []);
+
+	useEffect(() => {
+		connect();
+	}, [chatRoom])
 
 	useEffect(() => {
 		if (tab) {
