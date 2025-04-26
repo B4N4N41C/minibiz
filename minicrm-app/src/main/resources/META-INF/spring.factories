@@ -1,0 +1,2 @@
+org.springframework.modulith.core.ApplicationModuleDetectionStrategy=\
+  ru.miniprog.minicrmapp.config.ModuleDetection
