@@ -5,6 +5,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 import ViewKanbanIcon from "@mui/icons-material/ViewKanban";
 import LogoutIcon from "@mui/icons-material/Logout";
 import EqualizerIcon from '@mui/icons-material/Equalizer';
+import PeopleIcon from '@mui/icons-material/People';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
@@ -18,6 +19,10 @@ const NavBar = () => {
 	};
 	const handleChatRedirect = () => {
 		navigate("/chat");
+	};
+
+	const handleUsersRedirect = () => {
+		navigate("/users");
 	};
 
 	const handleLogout = () => {
@@ -79,6 +84,14 @@ const NavBar = () => {
 						sx={{ minWidth: 1 / 1 }}
 					>
 						Чат
+					</Button>
+					<Button
+						onClick={() => handleUsersRedirect()}
+						variant="text"
+						startIcon={<PeopleIcon />}
+						sx={{ minWidth: 1 / 1 }}
+					>
+						Пользователи
 					</Button>
 				</Box>
 			</Drawer>
