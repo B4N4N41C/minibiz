@@ -29,9 +29,9 @@ const NavBar = () => {
 		authService.logout(navigate);
 	};
 
-	// const handleStatisticsRedirect = () => {
-	// 	navigate("/statistics");
-	// };
+	const handleDashboardRedirect = () => {
+		navigate("/dashboard");
+	};
 
 	const toggleDrawer = (newOpen) => () => {
 		setOpen(newOpen);
@@ -61,14 +61,14 @@ const NavBar = () => {
 			</AppBar>
 			<Drawer open={open} onClose={toggleDrawer(false)}>
 				<Box sx={{ minWidth: 220 }}>
-					{/*<Button*/}
-					{/*	onClick={() => handleChatRedirect()}*/}
-					{/*	variant="text"*/}
-					{/*	startIcon={<EqualizerIcon />}*/}
-					{/*	sx={{ minWidth: 1 / 1 }}*/}
-					{/*>*/}
-					{/*	Статистика*/}
-					{/*</Button>*/}
+					<Button
+						onClick={() => handleDashboardRedirect()}
+						variant="text"
+						startIcon={<EqualizerIcon />}
+						sx={{ minWidth: 1 / 1 }}
+					>
+						Статистика
+					</Button>
 					<Button
 						onClick={() => handleKanbanRedirect()}
 						variant="text"

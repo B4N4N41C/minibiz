@@ -4,6 +4,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+import ru.miniprog.minicrmapp.chat.internal.api.payload.MessageDto;
 import ru.miniprog.minicrmapp.chat.internal.api.payload.MessagePayload;
 import ru.miniprog.minicrmapp.chat.internal.api.payload.NewChatRoomPayload;
 import ru.miniprog.minicrmapp.chat.internal.model.*;
@@ -14,6 +15,7 @@ import ru.miniprog.minicrmapp.chat.internal.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ChatController {
@@ -46,6 +48,20 @@ public class ChatController {
         simpMessagingTemplate.convertAndSend("/chatroom/" + chatRoomId, message);
         System.out.println(message.toString());
         return message;
+    }
+
+    @GetMapping("/chat/messages")
+    public List<MessageDto> getAllMessages() {
+        return messageRepository.findAll().stream()
+                .map(msg -> new MessageDto(
+                        msg.getId(),
+                        msg.getSenderName(),
+                        msg.getChatRoom().getId(),
+                        msg.getMessage(),
+                        msg.getDate(),
+                        msg.getStatus().name()
+                ))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/getAllChatRoom/{username}")
