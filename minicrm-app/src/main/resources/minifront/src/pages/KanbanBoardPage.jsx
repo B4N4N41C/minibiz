@@ -20,6 +20,7 @@ import axios from "axios";
 const KanbanBoardPage = () => {
 	const [columns, setColumns] = useState([]);
 	const [tasks, setTasks] = useState([]);
+	const [users, setUsers] = useState([]);
 	const [newColumnName, setNewColumnName] = useState("");
 	const [newTaskTitle, setNewTaskTitle] = useState("");
 	const [newTaskDescription, setNewTaskDescription] = useState("");
@@ -30,6 +31,15 @@ const KanbanBoardPage = () => {
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [editedTaskTitle, setEditedTaskTitle] = useState("");
 	const [editedTaskDescription, setEditedTaskDescription] = useState("");
+
+	const fetchUsers = async () => {
+		try {
+			const { data } = await axios.get("/users");
+			setUsers(data);
+		} catch (error) {
+			console.error("Error fetching users:", error);
+		}
+	};
 
 	const fetchStatus = async () => {
 		try {
@@ -52,7 +62,13 @@ const KanbanBoardPage = () => {
 	useEffect(() => {
 		fetchStatus();
 		fetchTasks();
+		fetchUsers();
 	}, []);
+
+	const getUsernameById = (ownerId) => {
+		const user = users.find(user => user.id === ownerId);
+		return user ? user.username : `ID: ${ownerId}`;
+	};
 
 	const onDragStart = (e, id) => {
 		e.dataTransfer.setData("taskId", id);
@@ -90,6 +106,7 @@ const KanbanBoardPage = () => {
 				title: newTaskTitle,
 				description: newTaskDescription,
 				status_id: Number(selectedColumnId),
+				owner: Number(users.find(u => u.username === localStorage.getItem("username"))?.id)
 			});
 			fetchStatus();
 			fetchTasks();
@@ -189,6 +206,17 @@ const KanbanBoardPage = () => {
 											{task.profit && (
 												<Typography sx={{ fontWeight: 'bold', color: 'green' }}>
 													{`${task.profit.toLocaleString('ru-RU')} ₽`}
+												</Typography>
+											)}
+											{task.ownerId && (
+												<Typography
+													sx={{
+														fontSize: 12,
+														color: 'text.secondary',
+														mt: 1
+													}}
+												>
+													Владелец: {getUsernameById(task.ownerId)}
 												</Typography>
 											)}
 										</CardContent>

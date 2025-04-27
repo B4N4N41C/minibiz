@@ -27,6 +27,7 @@ public class Task {
     @CreatedDate
     private Date createdAt = new Date();
     private Double profit;
+    private Long ownerId;
     @ManyToOne
     @JoinColumn(name = "status_id")
     @JsonManagedReference

@@ -62,6 +62,7 @@ public class KanbanBoardController {
         task.setTitle(payload.title());
         task.setDescription(payload.description());
         task.setStatus(statusRepository.getReferenceById(payload.status_id()));
+        task.setOwnerId(payload.owner());
         return taskRepository.save(task);
     }
 
