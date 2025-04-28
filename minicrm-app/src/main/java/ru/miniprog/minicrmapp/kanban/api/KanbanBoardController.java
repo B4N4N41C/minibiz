@@ -39,6 +39,20 @@ public class KanbanBoardController {
         return statusRepository.save(newStatus);
     }
 
+    @Operation(summary = "Редактирование статуса")
+    @PatchMapping("/status/{id}")
+    public Status updateStatus(@PathVariable Long id, @RequestBody NewStatusPayload status){
+        Status newStatus = statusRepository.getReferenceById(id);
+        newStatus.setName(status.name());
+        return statusRepository.save(newStatus);
+    }
+
+    @Operation(summary = "Удаление статусов")
+    @DeleteMapping("/status/{id}")
+    public void deleteStatus(@PathVariable Long id){
+        statusRepository.deleteById(id);
+    }
+
     @Operation(summary = "Редактирование сделок")
     @PatchMapping("/task/{id}")
     public Task updateTask(@PathVariable Long id, @RequestBody UpdateTaskPayload taskPayload){

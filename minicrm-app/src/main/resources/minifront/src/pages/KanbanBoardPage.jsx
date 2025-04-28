@@ -6,12 +6,13 @@ import {
 	CardContent,
 	Divider,
 	Drawer,
-	IconButton, InputAdornment,
+	IconButton,
+	InputAdornment,
 	Paper,
 	Stack,
 	TextField,
 	Typography
-} from '@mui/material'
+} from '@mui/material';
 import AddIcon from "@mui/icons-material/Add";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import NavBar from "../components/NavBar";
@@ -27,10 +28,13 @@ const KanbanBoardPage = () => {
 	const [selectedColumnId, setSelectedColumnId] = useState("");
 	const [isAddingTask, setIsAddingTask] = useState(false);
 	const [isAddingColumn, setIsAddingColumn] = useState(false);
-	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [isTaskDrawerOpen, setIsTaskDrawerOpen] = useState(false);
+	const [isColumnDrawerOpen, setIsColumnDrawerOpen] = useState(false);
 	const [selectedTask, setSelectedTask] = useState(null);
+	const [selectedColumn, setSelectedColumn] = useState(null);
 	const [editedTaskTitle, setEditedTaskTitle] = useState("");
 	const [editedTaskDescription, setEditedTaskDescription] = useState("");
+	const [editedColumnName, setEditedColumnName] = useState("");
 
 	const fetchUsers = async () => {
 		try {
@@ -91,12 +95,33 @@ const KanbanBoardPage = () => {
 	const addColumn = async () => {
 		try {
 			await axios.post("/kanban/status", { name: newColumnName });
-			setColumns([...columns]);
 			setNewColumnName("");
 			setIsAddingColumn(false);
 			fetchStatus();
 		} catch (error) {
 			console.error("Error adding column:", error);
+		}
+	};
+
+	const updateColumn = async () => {
+		try {
+			await axios.patch(`/kanban/status/${selectedColumn.id}`, {
+				name: editedColumnName
+			});
+			fetchStatus();
+			closeColumnDrawer();
+		} catch (error) {
+			console.error("Error updating column:", error);
+		}
+	};
+
+	const deleteColumn = async () => {
+		try {
+			await axios.delete(`/kanban/status/${selectedColumn.id}`);
+			fetchStatus();
+			closeColumnDrawer();
+		} catch (error) {
+			console.error("Error deleting column:", error);
 		}
 	};
 
@@ -108,7 +133,6 @@ const KanbanBoardPage = () => {
 				status_id: Number(selectedColumnId),
 				owner: Number(users.find(u => u.username === localStorage.getItem("username"))?.id)
 			});
-			fetchStatus();
 			fetchTasks();
 			setNewTaskTitle("");
 			setNewTaskDescription("");
@@ -118,16 +142,27 @@ const KanbanBoardPage = () => {
 		}
 	};
 
-	const openDrawer = (task) => {
+	const openTaskDrawer = (task) => {
 		setSelectedTask(task);
 		setEditedTaskTitle(task.title);
 		setEditedTaskDescription(task.description);
-		setIsDrawerOpen(true);
+		setIsTaskDrawerOpen(true);
 	};
 
-	const closeDrawer = () => {
-		setIsDrawerOpen(false);
+	const openColumnDrawer = (column) => {
+		setSelectedColumn(column);
+		setEditedColumnName(column.name);
+		setIsColumnDrawerOpen(true);
+	};
+
+	const closeTaskDrawer = () => {
+		setIsTaskDrawerOpen(false);
 		setSelectedTask(null);
+	};
+
+	const closeColumnDrawer = () => {
+		setIsColumnDrawerOpen(false);
+		setSelectedColumn(null);
 	};
 
 	const updateTask = async () => {
@@ -138,7 +173,7 @@ const KanbanBoardPage = () => {
 				profit: selectedTask.profit,
 			});
 			fetchTasks();
-			closeDrawer();
+			closeTaskDrawer();
 		} catch (error) {
 			console.error("Error updating task:", error);
 		}
@@ -173,16 +208,16 @@ const KanbanBoardPage = () => {
 						}}
 						elevation={3}
 					>
-						<Typography component="h5" variant="h5" sx={{ margin: 2 }}>
-							{column.name}
-						</Typography>
+						<Box sx={{ display: 'flex', alignItems: 'center', margin: 2 }}>
+							<Typography component="h5" variant="h5" sx={{ flexGrow: 1 }}>
+								{column.name}
+							</Typography>
+							<IconButton onClick={() => openColumnDrawer(column)}>
+								<MoreVertIcon />
+							</IconButton>
+						</Box>
 						<Divider />
-						<Box
-							sx={{
-								overflowY: "auto",
-								flexGrow: 1,
-							}}
-						>
+						<Box sx={{ overflowY: "auto", flexGrow: 1 }}>
 							{tasks
 								.filter((t) => t.status.id === column.id)
 								.map((task) => (
@@ -222,7 +257,7 @@ const KanbanBoardPage = () => {
 										</CardContent>
 										<IconButton
 											sx={{ position: "absolute", top: 8, right: 8 }}
-											onClick={() => openDrawer(task)}
+											onClick={() => openTaskDrawer(task)}
 										>
 											<MoreVertIcon />
 										</IconButton>
@@ -331,7 +366,7 @@ const KanbanBoardPage = () => {
 					)}
 				</Paper>
 			</Stack>
-			<Drawer anchor="right" open={isDrawerOpen} onClose={closeDrawer}>
+			<Drawer anchor="right" open={isTaskDrawerOpen} onClose={closeTaskDrawer}>
 				<Box sx={{ width: 380, padding: 2 }}>
 					<Typography variant="h6" component="h6">
 						Edit Task
@@ -364,12 +399,44 @@ const KanbanBoardPage = () => {
 							endAdornment: <InputAdornment position="end">₽</InputAdornment>,
 						}}
 					/>
-					<Button variant="contained" onClick={updateTask}>
+					<Button variant="contained" onClick={updateTask} sx={{ mr: 2 }}>
 						Save
 					</Button>
-					<Button variant="outlined" onClick={closeDrawer}>
+					<Button variant="outlined" onClick={closeTaskDrawer}>
 						Cancel
 					</Button>
+				</Box>
+			</Drawer>
+			<Drawer anchor="right" open={isColumnDrawerOpen} onClose={closeColumnDrawer}>
+				<Box sx={{ width: 380, padding: 2 }}>
+					<Typography variant="h6" component="h6">
+						Edit Column
+					</Typography>
+					<TextField
+						label="Column Name"
+						value={editedColumnName}
+						onChange={(e) => setEditedColumnName(e.target.value)}
+						sx={{ marginBottom: 2 }}
+						fullWidth
+					/>
+					<Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+						<Button
+							variant="contained"
+							color="error"
+							onClick={deleteColumn}
+							sx={{ mr: 2 }}
+						>
+							Delete Column
+						</Button>
+						<Box>
+							<Button variant="outlined" onClick={closeColumnDrawer} sx={{ mr: 2 }}>
+								Cancel
+							</Button>
+							<Button variant="contained" onClick={updateColumn}>
+								Save
+							</Button>
+						</Box>
+					</Box>
 				</Box>
 			</Drawer>
 		</>
