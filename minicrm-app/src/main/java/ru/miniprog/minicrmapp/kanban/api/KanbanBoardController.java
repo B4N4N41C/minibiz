@@ -42,7 +42,7 @@ public class KanbanBoardController {
     @Operation(summary = "Редактирование статуса")
     @PatchMapping("/status/{id}")
     public Status updateStatus(@PathVariable Long id, @RequestBody NewStatusPayload status){
-        Status newStatus = statusRepository.getReferenceById(id);
+        Status newStatus = statusRepository.findById(id).get();
         newStatus.setName(status.name());
         return statusRepository.save(newStatus);
     }
@@ -75,7 +75,7 @@ public class KanbanBoardController {
         Task task = new Task();
         task.setTitle(payload.title());
         task.setDescription(payload.description());
-        task.setStatus(statusRepository.getReferenceById(payload.status_id()));
+        task.setStatus(statusRepository.findById(payload.status_id()).get());
         task.setOwnerId(payload.owner());
         return taskRepository.save(task);
     }

@@ -41,7 +41,7 @@ public class ChatController {
         messageRepository.save(new Message(
                 null,
                 message.senderName(),
-                chatRoomRepository.getReferenceById(chatRoomId),
+                chatRoomId,
                 message.message(),
                 new Date(),
                 MessageStatus.valueOf(message.status())));
@@ -56,7 +56,7 @@ public class ChatController {
                 .map(msg -> new MessageDto(
                         msg.getId(),
                         msg.getSenderName(),
-                        msg.getChatRoom().getId(),
+                        msg.getChatRoom(),
                         msg.getMessage(),
                         msg.getDate(),
                         msg.getStatus().name()
@@ -73,7 +73,7 @@ public class ChatController {
     public ChatRoom postMethodName(@RequestBody NewChatRoomPayload newChatRoomPayload) {
         List<UserCrm> users = new ArrayList<>();
         for (Long userCrmDtoId : newChatRoomPayload.users()) {
-            users.add(userRepository.getReferenceById(userCrmDtoId));
+            users.add(userRepository.findById(userCrmDtoId).get());
         }
         return chatRoomRepository.save(new ChatRoom(null, newChatRoomPayload.name(),
                 TypeChat.valueOf(newChatRoomPayload.typeChat()), users, null));
