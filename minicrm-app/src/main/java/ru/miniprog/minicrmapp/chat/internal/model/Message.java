@@ -1,7 +1,6 @@
 package ru.miniprog.minicrmapp.chat.internal.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
@@ -11,16 +10,11 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-@Entity
 public class Message {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String senderName;
-    @ManyToOne
     @JsonBackReference
-    @JoinColumn(name = "chat_room_id")
-    private ChatRoom chatRoom;
+    private Long chatRoom;
     private String message;
     private Date date = new Date();
     private MessageStatus status;

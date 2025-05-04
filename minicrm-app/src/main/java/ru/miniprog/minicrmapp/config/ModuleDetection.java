@@ -1,6 +1,5 @@
 package ru.miniprog.minicrmapp.config;
 
-
 import org.springframework.modulith.core.ApplicationModuleDetectionStrategy;
 import org.springframework.modulith.core.JavaPackage;
 
