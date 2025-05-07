@@ -1,4 +1,4 @@
-package ru.miniprog.minicrmapp.chat.internal.api;
+package ru.miniprog.minicrmapp.users.internal.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.miniprog.minicrmapp.chat.internal.dto.JwtAuthenticationResponse;
-import ru.miniprog.minicrmapp.chat.internal.dto.SignInRequest;
-import ru.miniprog.minicrmapp.chat.internal.dto.SignUpRequest;
-import ru.miniprog.minicrmapp.chat.internal.service.AuthenticationService;
+
+import ru.miniprog.minicrmapp.users.internal.dto.JwtAuthenticationResponse;
+import ru.miniprog.minicrmapp.users.internal.dto.SignInRequest;
+import ru.miniprog.minicrmapp.users.internal.dto.SignUpRequest;
+import ru.miniprog.minicrmapp.users.internal.service.AuthenticationService;
 
 @RestController
 @RequestMapping("/auth")

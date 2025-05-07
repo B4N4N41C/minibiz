@@ -1,6 +1,7 @@
-package ru.miniprog.minicrmapp.chat.internal.model;
+package ru.miniprog.minicrmapp.users.internal.model;
 
 import lombok.*;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,7 +26,7 @@ public class UserCrm implements UserDetails {
 
     private Role role;
 
-    private List<ChatRoom> chatRooms;
+    private List<Long> chatRooms;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

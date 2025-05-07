@@ -122,7 +122,7 @@ const DashboardPage = () => {
           <Grid2 xs={12}>
             <Paper elevation={3} sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
               <Typography variant="h6" gutterBottom>
-                Количество сообщений для каждого пользователя
+                Количество сообщений для каждого пользователя.
               </Typography>
               <Box sx={{ flexGrow: 1 }}>
                 <ResponsiveContainer width="100%" height={400}>
@@ -141,7 +141,7 @@ const DashboardPage = () => {
           <Grid2 xs={12}>
             <Paper elevation={3} sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
               <Typography variant="h6" gutterBottom>
-                Кольичество сделок созданых каждым пользователем
+                Количество сделок, созданных каждым пользователем.
               </Typography>
               <Box sx={{ flexGrow: 1 }}>
                 <ResponsiveContainer width="100%" height={400}>
@@ -176,7 +176,7 @@ const DashboardPage = () => {
           <Grid2 xs={12}>
             <Paper elevation={3} sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
               <Typography variant="h6" gutterBottom>
-                Приболь которую принёс каждый сотрудник
+                Прибыль, которую принёс каждый сотрудник.
               </Typography>
               <Box sx={{ flexGrow: 1 }}>
                 <ResponsiveContainer width="100%" height={400}>

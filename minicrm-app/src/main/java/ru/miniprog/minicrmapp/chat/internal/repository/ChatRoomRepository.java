@@ -6,7 +6,8 @@ import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
 import ru.miniprog.minicrmapp.chat.internal.mapper.ChatRoomMapper;
 import ru.miniprog.minicrmapp.chat.internal.model.ChatRoom;
-import ru.miniprog.minicrmapp.chat.internal.model.UserCrm;
+import ru.miniprog.minicrmapp.users.internal.model.UserCrm;
+import ru.miniprog.minicrmapp.users.internal.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;

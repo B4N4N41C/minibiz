@@ -1,13 +1,14 @@
-package ru.miniprog.minicrmapp.chat.internal.service;
+package ru.miniprog.minicrmapp.users.internal.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.miniprog.minicrmapp.chat.internal.model.Role;
-import ru.miniprog.minicrmapp.chat.internal.model.UserCrm;
-import ru.miniprog.minicrmapp.chat.internal.repository.UserRepository;
+
+import ru.miniprog.minicrmapp.users.internal.repository.UserRepository;
+import ru.miniprog.minicrmapp.users.internal.model.Role;
+import ru.miniprog.minicrmapp.users.internal.model.UserCrm;
 
 @Service
 @RequiredArgsConstructor
@@ -75,10 +76,7 @@ public class UserService {
 
     /**
      * Выдача прав администратора текущему пользователю
-     * <p>
-     * Нужен для демонстрации
      */
-    @Deprecated
     public void getAdmin() {
         UserCrm user = getCurrentUser();
         user.setRole(Role.ROLE_ADMIN);

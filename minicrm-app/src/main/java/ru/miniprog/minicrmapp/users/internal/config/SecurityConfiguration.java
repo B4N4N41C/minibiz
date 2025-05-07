@@ -1,6 +1,8 @@
-package ru.miniprog.minicrmapp.chat.internal.config;
+package ru.miniprog.minicrmapp.users.internal.config;
 
 import lombok.RequiredArgsConstructor;
+import ru.miniprog.minicrmapp.users.internal.service.UserService;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import ru.miniprog.minicrmapp.chat.internal.service.UserService;
 
 import java.util.List;
 

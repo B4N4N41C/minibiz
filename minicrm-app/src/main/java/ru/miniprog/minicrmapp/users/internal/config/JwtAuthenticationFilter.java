@@ -1,4 +1,4 @@
-package ru.miniprog.minicrmapp.chat.internal.config;
+package ru.miniprog.minicrmapp.users.internal.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,8 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.miniprog.minicrmapp.chat.internal.service.JwtService;
-import ru.miniprog.minicrmapp.chat.internal.service.UserService;
+import ru.miniprog.minicrmapp.users.internal.service.JwtService;
+import ru.miniprog.minicrmapp.users.internal.service.UserService;
 
 import java.io.IOException;
 

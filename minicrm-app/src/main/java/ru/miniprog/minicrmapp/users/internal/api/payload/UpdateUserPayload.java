@@ -1,4 +1,4 @@
-package ru.miniprog.minicrmapp.chat.internal.api.payload;
+package ru.miniprog.minicrmapp.users.internal.api.payload;
 
 public record UpdateUserPayload(
         Long id,

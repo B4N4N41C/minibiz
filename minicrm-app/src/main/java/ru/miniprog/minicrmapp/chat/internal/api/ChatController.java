@@ -10,7 +10,8 @@ import ru.miniprog.minicrmapp.chat.internal.api.payload.NewChatRoomPayload;
 import ru.miniprog.minicrmapp.chat.internal.model.*;
 import ru.miniprog.minicrmapp.chat.internal.repository.ChatRoomRepository;
 import ru.miniprog.minicrmapp.chat.internal.repository.MessageRepository;
-import ru.miniprog.minicrmapp.chat.internal.repository.UserRepository;
+import ru.miniprog.minicrmapp.users.internal.model.UserCrm;
+import ru.miniprog.minicrmapp.users.internal.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Date;

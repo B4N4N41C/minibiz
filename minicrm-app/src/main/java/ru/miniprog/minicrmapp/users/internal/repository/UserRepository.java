@@ -1,13 +1,11 @@
-package ru.miniprog.minicrmapp.chat.internal.repository;
+package ru.miniprog.minicrmapp.users.internal.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import lombok.Getter;
-import lombok.Setter;
-import ru.miniprog.minicrmapp.chat.internal.model.Role;
-import ru.miniprog.minicrmapp.chat.internal.model.UserCrm;
+import ru.miniprog.minicrmapp.users.internal.model.Role;
+import ru.miniprog.minicrmapp.users.internal.model.UserCrm;
 
 import java.util.List;
 import java.util.Optional;

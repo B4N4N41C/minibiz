@@ -1,4 +1,4 @@
-package ru.miniprog.minicrmapp.chat.internal.service;
+package ru.miniprog.minicrmapp.users.internal.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -7,10 +7,11 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import ru.miniprog.minicrmapp.users.internal.model.UserCrm;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import ru.miniprog.minicrmapp.chat.internal.model.UserCrm;
 
 import java.security.Key;
 import java.util.Date;

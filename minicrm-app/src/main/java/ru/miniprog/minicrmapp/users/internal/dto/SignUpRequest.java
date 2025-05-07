@@ -1,4 +1,4 @@
-package ru.miniprog.minicrmapp.chat.internal.dto;
+package ru.miniprog.minicrmapp.users.internal.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

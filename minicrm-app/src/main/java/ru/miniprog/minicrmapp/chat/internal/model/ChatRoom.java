@@ -3,6 +3,7 @@ package ru.miniprog.minicrmapp.chat.internal.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import ru.miniprog.minicrmapp.users.internal.model.UserCrm;
 
 import java.util.List;
 

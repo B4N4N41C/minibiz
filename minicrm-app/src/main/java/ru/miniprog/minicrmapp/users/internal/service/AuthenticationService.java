@@ -1,15 +1,16 @@
-package ru.miniprog.minicrmapp.chat.internal.service;
+package ru.miniprog.minicrmapp.users.internal.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.miniprog.minicrmapp.chat.internal.dto.JwtAuthenticationResponse;
-import ru.miniprog.minicrmapp.chat.internal.dto.SignInRequest;
-import ru.miniprog.minicrmapp.chat.internal.dto.SignUpRequest;
-import ru.miniprog.minicrmapp.chat.internal.model.Role;
-import ru.miniprog.minicrmapp.chat.internal.model.UserCrm;
+
+import ru.miniprog.minicrmapp.users.internal.dto.JwtAuthenticationResponse;
+import ru.miniprog.minicrmapp.users.internal.dto.SignInRequest;
+import ru.miniprog.minicrmapp.users.internal.dto.SignUpRequest;
+import ru.miniprog.minicrmapp.users.internal.model.Role;
+import ru.miniprog.minicrmapp.users.internal.model.UserCrm;
 
 @Service
 @RequiredArgsConstructor

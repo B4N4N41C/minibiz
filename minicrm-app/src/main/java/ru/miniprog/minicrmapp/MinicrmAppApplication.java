@@ -3,14 +3,12 @@ package ru.miniprog.minicrmapp;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
-import org.springframework.modulith.Modulith;
 import org.springframework.modulith.Modulithic;
 import org.springframework.modulith.core.ApplicationModules;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.modulith.docs.Documenter;
 import org.springframework.web.bind.annotation.RestController;
-import ru.miniprog.minicrmapp.config.ModuleDetection;
 
 @SpringBootApplication
 @Modulithic

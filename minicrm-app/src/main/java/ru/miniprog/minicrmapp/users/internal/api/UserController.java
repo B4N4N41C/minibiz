@@ -1,17 +1,16 @@
-package ru.miniprog.minicrmapp.chat.internal.api;
+package ru.miniprog.minicrmapp.users.internal.api;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ru.miniprog.minicrmapp.chat.internal.api.payload.UpdateUserPayload;
-import ru.miniprog.minicrmapp.chat.internal.dto.UserCrmDTO;
-import ru.miniprog.minicrmapp.chat.internal.model.UserCrm;
-import ru.miniprog.minicrmapp.chat.internal.repository.UserRepository;
 
-import java.util.ArrayList;
+import ru.miniprog.minicrmapp.users.internal.api.payload.UpdateUserPayload;
+import ru.miniprog.minicrmapp.users.internal.dto.UserCrmDTO;
+import ru.miniprog.minicrmapp.users.internal.model.UserCrm;
+import ru.miniprog.minicrmapp.users.internal.repository.UserRepository;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -1,4 +1,4 @@
-package ru.miniprog.minicrmapp.chat.internal.dto;
+package ru.miniprog.minicrmapp.users.internal.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
