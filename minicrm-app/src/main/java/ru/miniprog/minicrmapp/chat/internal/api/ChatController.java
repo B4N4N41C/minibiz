@@ -60,8 +60,7 @@ public class ChatController {
                         msg.getChatRoom(),
                         msg.getMessage(),
                         msg.getDate(),
-                        msg.getStatus().name()
-                ))
+                        msg.getStatus().name()))
                 .collect(Collectors.toList());
     }
 

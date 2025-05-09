@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.modulith.docs.Documenter;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @SpringBootApplication
 @Modulithic
@@ -40,4 +42,11 @@ class MinicrmAppApplicationController {
 					.body("Generation failed: " + e.getMessage());
 		}
 	}
+
+	@GetMapping("/moduleth")
+	public String getMethodName() {
+		final ApplicationModules modules = ApplicationModules.of(MinicrmAppApplication.class);
+		return modules.toString();
+	}
+
 }
