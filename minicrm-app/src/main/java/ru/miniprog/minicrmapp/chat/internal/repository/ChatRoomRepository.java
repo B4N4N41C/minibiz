@@ -17,15 +17,8 @@ import java.util.Optional;
 public class ChatRoomRepository {
     private final JdbcTemplate jdbcTemplate;
     private final UserRepository userRepository;
-    private final MessageRepository messageRepository;
     private final ChatRoomMapper chatRoomMapper;
 
-    // public ChatRoomRepository(JdbcTemplate jdbcTemplate, UserRepository userRepository, ChatRoomMapper chatRoomMapper, MessageRepository messageRepository) {
-    //     this.jdbcTemplate = jdbcTemplate;
-    //     this.userRepository = userRepository;
-    //     this.messageRepository = messageRepository;
-    //     this.chatRoomMapper = chatRoomMapper;
-    // }
 
     public List<ChatRoom> findByUsers_UsernameIgnoreCase(String username) {
         String sql = """

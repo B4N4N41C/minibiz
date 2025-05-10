@@ -70,3 +70,16 @@ CREATE TABLE IF NOT EXISTS chat_room_users (
     FOREIGN KEY (users_id) REFERENCES user_crm(id),
     FOREIGN KEY (chat_rooms_id) REFERENCES chat_room(id)
 );
+
+create table note
+(
+    id      bigint generated always as identity
+        constraint note_pk
+            primary key,
+    message text   not null,
+    task_id bigint not null
+        constraint note_task_id_fk
+            references task,
+    date    timestamp
+);
+

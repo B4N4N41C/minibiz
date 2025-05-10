@@ -3,16 +3,16 @@ package ru.miniprog.minicrmapp.kanban.api;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.miniprog.minicrmapp.kanban.api.payload.NewStatusPayload;
-import ru.miniprog.minicrmapp.kanban.api.payload.NewTaskPayload;
-import ru.miniprog.minicrmapp.kanban.api.payload.UpdateTaskPayload;
-import ru.miniprog.minicrmapp.kanban.api.payload.UpdateTaskStatusPayload;
+import ru.miniprog.minicrmapp.kanban.api.payload.*;
+import ru.miniprog.minicrmapp.kanban.model.Note;
 import ru.miniprog.minicrmapp.kanban.model.Status;
 import ru.miniprog.minicrmapp.kanban.model.Task;
+import ru.miniprog.minicrmapp.kanban.repository.NoteRepository;
 import ru.miniprog.minicrmapp.kanban.repository.StatusRepository;
 import ru.miniprog.minicrmapp.kanban.repository.TaskRepository;
 import ru.miniprog.minicrmapp.kanban.service.KanbanService;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -24,6 +24,7 @@ public class KanbanBoardController {
 
     private final KanbanService kanbanService;
     private final TaskRepository taskRepository;
+    private final NoteRepository noteRepository;
 
     @Operation(summary = "Получение статусов")
     @GetMapping("/status")
@@ -85,6 +86,18 @@ public class KanbanBoardController {
     public UpdateTaskStatusPayload updateStatusTask(@RequestBody UpdateTaskStatusPayload payload) {
         this.kanbanService.updateTaskStatus(payload);
         return payload;
+    }
+
+    @Operation(summary = "Получение заметок по id сделки")
+    @GetMapping("/notes/{id}")
+    public List<Note> getAllNotes(@PathVariable long id){
+        return noteRepository.findByTaskId(id);
+    }
+
+    @Operation(summary = "Добавление заметок")
+    @PostMapping("/notes")
+    public Note addNotes(@RequestBody NewNote note){
+        return noteRepository.save(new Note(null, note.message(), note.task_id(), new Date()));
     }
 
 }
