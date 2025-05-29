@@ -56,7 +56,7 @@ public class UserRepository {
                     user.getUsername(),
                     user.getPassword(),
                     user.getEmail(),
-                    user.getRole().name());
+                    Role.ROLE_USER.name());
             user.setId(id);
         } else {
             String sql = "UPDATE user_crm SET username = ?, password = ?, email = ?, role = ? WHERE id = ?";

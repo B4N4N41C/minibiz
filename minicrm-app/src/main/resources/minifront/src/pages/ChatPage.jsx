@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import NavBar from "../components/NavBar.jsx";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 var stompClient = null;
 const ChatPage = () => {
@@ -30,7 +31,7 @@ const ChatPage = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [userData, setUserData] = useState({
-    username: localStorage.getItem("username"),
+    username: Cookies.get("Username"),
     receivername: "",
     connected: false,
     message: "",

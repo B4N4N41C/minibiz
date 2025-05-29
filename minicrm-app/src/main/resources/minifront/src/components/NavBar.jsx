@@ -7,7 +7,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import PeopleIcon from "@mui/icons-material/People";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
 import { useStore } from "../stores/mainStore";
 import axios from "axios";
@@ -32,7 +32,10 @@ const NavBar = () => {
   const handleKanbanRedirect = () => navigate("/kanban");
   const handleChatRedirect = () => navigate("/chat");
   const handleUsersRedirect = () => navigate("/users");
-  const handleLogout = () => authService.logout(navigate);
+  const handleLogout = () => {
+    axios.post("/logout");
+    location.reload();
+  };
   const handleDashboardRedirect = () => navigate("/dashboard");
   const toggleDrawer = (newOpen) => () => setOpen(newOpen);
 

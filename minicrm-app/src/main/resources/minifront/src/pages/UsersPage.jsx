@@ -111,8 +111,7 @@ const UsersPage = () => {
           severity: "success",
         });
       } else {
-        // Отправка на эндпоинт регистрации
-        await axios.post("/auth/sign-up", {
+        await axios.post("/users", {
           username: formData.username,
           email: formData.email,
           password: formData.password
