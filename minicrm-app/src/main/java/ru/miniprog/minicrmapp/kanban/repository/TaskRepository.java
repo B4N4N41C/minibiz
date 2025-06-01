@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import ru.miniprog.minicrmapp.kanban.model.Task;
-import ru.miniprog.minicrmapp.users.internal.model.UserCrm;
 
 @Repository
 public class TaskRepository {

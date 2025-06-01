@@ -21,42 +21,41 @@ import java.util.List;
 public class KanbanBoardController {
 
     private final StatusRepository statusRepository;
-
     private final KanbanService kanbanService;
     private final TaskRepository taskRepository;
     private final NoteRepository noteRepository;
 
-    @Operation(summary = "Получение статусов")
+    @Operation(summary = "Получить список всех статусов")
     @GetMapping("/status")
-    public List<Status> getAllStatus(){
+    public List<Status> getAllStatus() {
         return statusRepository.findAll();
     }
 
-    @Operation(summary = "Добавление статусов")
+    @Operation(summary = "Добавить новый статус")
     @PostMapping("/status")
-    public Status addStatus(@RequestBody NewStatusPayload status){
+    public Status addStatus(@RequestBody NewStatusPayload status) {
         Status newStatus = new Status();
         newStatus.setName(status.name());
         return statusRepository.save(newStatus);
     }
 
-    @Operation(summary = "Редактирование статуса")
+    @Operation(summary = "Обновить существующий статус по ID")
     @PatchMapping("/status/{id}")
-    public Status updateStatus(@PathVariable Long id, @RequestBody NewStatusPayload status){
+    public Status updateStatus(@PathVariable Long id, @RequestBody NewStatusPayload status) {
         Status newStatus = statusRepository.findById(id).get();
         newStatus.setName(status.name());
         return statusRepository.save(newStatus);
     }
 
-    @Operation(summary = "Удаление статусов")
+    @Operation(summary = "Удалить статус по ID")
     @DeleteMapping("/status/{id}")
-    public void deleteStatus(@PathVariable Long id){
+    public void deleteStatus(@PathVariable Long id) {
         statusRepository.deleteById(id);
     }
 
-    @Operation(summary = "Редактирование сделок")
+    @Operation(summary = "Обновить существующую задачу по ID")
     @PatchMapping("/task/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody UpdateTaskPayload taskPayload){
+    public Task updateTask(@PathVariable Long id, @RequestBody UpdateTaskPayload taskPayload) {
         Task task = taskRepository.findById(id).get();
         task.setTitle(taskPayload.title());
         task.setDescription(taskPayload.description());
@@ -64,15 +63,15 @@ public class KanbanBoardController {
         return taskRepository.save(task);
     }
 
-    @Operation(summary = "Получение сделок")
+    @Operation(summary = "Получить список всех задач")
     @GetMapping("/task")
-    public List<Task> getAllTask(){
+    public List<Task> getAllTask() {
         return taskRepository.findAll();
     }
 
-    @Operation(summary = "Добавление сделок")
+    @Operation(summary = "Добавить новую задачу")
     @PostMapping("/task")
-    public Task addTask(@RequestBody NewTaskPayload payload){
+    public Task addTask(@RequestBody NewTaskPayload payload) {
         Task task = new Task();
         task.setTitle(payload.title());
         task.setDescription(payload.description());
@@ -81,23 +80,22 @@ public class KanbanBoardController {
         return taskRepository.save(task);
     }
 
-    @Operation(summary = "Обнавление статуса задачи")
+    @Operation(summary = "Обновить статус задачи")
     @PatchMapping("/task/new-status")
     public UpdateTaskStatusPayload updateStatusTask(@RequestBody UpdateTaskStatusPayload payload) {
         this.kanbanService.updateTaskStatus(payload);
         return payload;
     }
 
-    @Operation(summary = "Получение заметок по id сделки")
+    @Operation(summary = "Получить список всех заметок по ID задачи")
     @GetMapping("/notes/{id}")
-    public List<Note> getAllNotes(@PathVariable long id){
+    public List<Note> getAllNotes(@PathVariable long id) {
         return noteRepository.findByTaskId(id);
     }
 
-    @Operation(summary = "Добавление заметок")
+    @Operation(summary = "Добавить новую заметку")
     @PostMapping("/notes")
-    public Note addNotes(@RequestBody NewNote note){
+    public Note addNotes(@RequestBody NewNote note) {
         return noteRepository.save(new Note(null, note.message(), note.task_id(), new Date()));
     }
-
 }
