@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,7 +52,7 @@ public class UserController {
 		@ApiResponse(responseCode = "401", description = "Требуется авторизация")
 	})
 	@PostMapping
-	public ResponseEntity<UserCrmDTO> createUser(@RequestBody UpdateUserPayload userDTO) {
+	public ResponseEntity<UserCrmDTO> createUser(@Valid @RequestBody UpdateUserPayload userDTO) {
 		UserCrm user = new UserCrm();
 		user.setUsername(userDTO.username());
 		user.setEmail(userDTO.email());
@@ -67,7 +68,7 @@ public class UserController {
 		@ApiResponse(responseCode = "401", description = "Требуется авторизация")
 	})
 	@PatchMapping("/{id}")
-	public ResponseEntity<UserCrmDTO> updateUser(@PathVariable Long id, @RequestBody UpdateUserPayload userDTO) {
+	public ResponseEntity<UserCrmDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserPayload userDTO) {
 		UserCrm user = userRepository.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 		user.setUsername(userDTO.username());

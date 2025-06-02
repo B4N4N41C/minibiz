@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -53,7 +54,7 @@ public class ChatController {
         @ApiResponse(responseCode = "401", description = "Требуется авторизация")
     })
     @MessageMapping("/private-message")
-    public MessagePayload recMessage(@Payload MessagePayload message) {
+    public MessagePayload recMessage(@Valid @Payload MessagePayload message) {
         Long chatRoomId = message.chatRoom();
         messageRepository.save(new Message(
                 null,
@@ -103,7 +104,7 @@ public class ChatController {
         @ApiResponse(responseCode = "401", description = "Требуется авторизация")
     })
     @PostMapping("/chat/creat")
-    public ChatRoom postMethodName(@RequestBody NewChatRoomPayload newChatRoomPayload) {
+    public ChatRoom postMethodName(@Valid @RequestBody NewChatRoomPayload newChatRoomPayload) {
         List<UserCrm> users = new ArrayList<>();
         for (Long userCrmDtoId : newChatRoomPayload.users()) {
             users.add(userRepository.findById(userCrmDtoId).get());
