@@ -6,12 +6,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import ru.miniprog.minicrmapp.chat.api.ChatController;
 import ru.miniprog.minicrmapp.users.api.payload.UpdateUserPayload;
 import ru.miniprog.minicrmapp.users.dto.UserCrmDTO;
 import ru.miniprog.minicrmapp.users.model.UserCrm;
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 public class UserController {
 	final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	public UserController(UserRepository userRepository,
 						  PasswordEncoder passwordEncoder) {
@@ -40,9 +44,12 @@ public class UserController {
 	})
 	@GetMapping
 	public List<UserCrmDTO> getAllUsers() {
-		return userRepository.findAll().stream()
+		logger.info("Получение списка всех пользователей");
+		List<UserCrmDTO> users = userRepository.findAll().stream()
 				.map(user -> new UserCrmDTO(user.getId(), user.getUsername(), user.getEmail()))
 				.collect(Collectors.toList());
+		logger.info("Найдено {} пользователей", users.size());
+		return users;
 	}
 
 	@Operation(summary = "Создать нового пользователя", description = "Создает нового пользователя в системе")
@@ -53,11 +60,13 @@ public class UserController {
 	})
 	@PostMapping
 	public ResponseEntity<UserCrmDTO> createUser(@Valid @RequestBody UpdateUserPayload userDTO) {
+		logger.info("Создание нового пользователя: {}", userDTO.username());
 		UserCrm user = new UserCrm();
 		user.setUsername(userDTO.username());
 		user.setEmail(userDTO.email());
 		user.setPassword(passwordEncoder.encode(userDTO.password()));
 		UserCrm savedUser = userRepository.save(user);
+		logger.info("Пользователь успешно создан с ID: {}", savedUser.getId());
 		return ResponseEntity.ok(new UserCrmDTO(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail()));
 	}
 
@@ -69,6 +78,7 @@ public class UserController {
 	})
 	@PatchMapping("/{id}")
 	public ResponseEntity<UserCrmDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserPayload userDTO) {
+		logger.info("Обновление пользователя с ID: {}", id);
 		UserCrm user = userRepository.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 		user.setUsername(userDTO.username());
@@ -77,6 +87,7 @@ public class UserController {
 			user.setPassword(passwordEncoder.encode(userDTO.password()));
 		}
 		UserCrm updatedUser = userRepository.save(user);
+		logger.info("Пользователь с ID {} успешно обновлен", id);
 		return ResponseEntity.ok(new UserCrmDTO(updatedUser.getId(), updatedUser.getUsername(), updatedUser.getEmail()));
 	}
 
@@ -88,7 +99,9 @@ public class UserController {
 	})
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+		logger.info("Удаление пользователя с ID: {}", id);
 		userRepository.deleteById(id);
+		logger.info("Пользователь с ID {} успешно удален", id);
 		return ResponseEntity.noContent().build();
 	}
 }

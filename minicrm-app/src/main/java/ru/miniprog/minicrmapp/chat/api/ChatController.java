@@ -6,6 +6,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -36,6 +39,7 @@ public class ChatController {
     private final MessageRepository messageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
+    Logger log = LoggerFactory.getLogger(ChatController.class);
 
     ChatController(
             SimpMessagingTemplate simpMessagingTemplate,
@@ -55,6 +59,7 @@ public class ChatController {
     })
     @MessageMapping("/private-message")
     public MessagePayload recMessage(@Valid @Payload MessagePayload message) {
+        log.info("Получено новое сообщение от {} в чат-комнату {}", message.senderName(), message.chatRoom());
         Long chatRoomId = message.chatRoom();
         messageRepository.save(new Message(
                 null,
@@ -64,7 +69,7 @@ public class ChatController {
                 new Date(),
                 MessageStatus.valueOf(message.status())));
         simpMessagingTemplate.convertAndSend("/chatroom/" + chatRoomId, message);
-        System.out.println(message.toString());
+        log.info("Сообщение успешно сохранено и отправлено в чат-комнату {}", chatRoomId);
         return message;
     }
 
@@ -75,7 +80,8 @@ public class ChatController {
     })
     @GetMapping("/chat/messages")
     public List<MessageDto> getAllMessages() {
-        return messageRepository.findAll().stream()
+        log.info("Запрос на получение всех сообщений");
+        List<MessageDto> messages = messageRepository.findAll().stream()
                 .map(msg -> new MessageDto(
                         msg.getId(),
                         msg.getSenderName(),
@@ -84,6 +90,8 @@ public class ChatController {
                         msg.getDate(),
                         msg.getStatus().name()))
                 .collect(Collectors.toList());
+        log.info("Найдено {} сообщений", messages.size());
+        return messages;
     }
 
     @Operation(summary = "Получить чат-комнаты пользователя", description = "Возвращает список всех чат-комнат для указанного пользователя")
@@ -105,11 +113,14 @@ public class ChatController {
     })
     @PostMapping("/chat/creat")
     public ChatRoom postMethodName(@Valid @RequestBody NewChatRoomPayload newChatRoomPayload) {
+        log.info("Создание новой чат-комнаты: {}", newChatRoomPayload.name());
         List<UserCrm> users = new ArrayList<>();
         for (Long userCrmDtoId : newChatRoomPayload.users()) {
             users.add(userRepository.findById(userCrmDtoId).get());
         }
-        return chatRoomRepository.save(new ChatRoom(null, newChatRoomPayload.name(),
+        ChatRoom chatRoom = chatRoomRepository.save(new ChatRoom(null, newChatRoomPayload.name(),
                 TypeChat.valueOf(newChatRoomPayload.typeChat()), users, null));
+        log.info("Чат-комната успешно создана с ID: {}", chatRoom.getId());
+        return chatRoom;
     }
 }

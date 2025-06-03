@@ -2,7 +2,10 @@ package ru.miniprog.minicrmapp.kanban.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+import ru.miniprog.minicrmapp.chat.api.ChatController;
 import ru.miniprog.minicrmapp.kanban.api.payload.*;
 import ru.miniprog.minicrmapp.kanban.model.Note;
 import ru.miniprog.minicrmapp.kanban.model.Status;
@@ -25,18 +28,26 @@ public class KanbanBoardController {
     private final TaskRepository taskRepository;
     private final NoteRepository noteRepository;
 
+    Logger log = LoggerFactory.getLogger(KanbanBoardController.class);
+
     @Operation(summary = "Получить список всех статусов")
     @GetMapping("/status")
     public List<Status> getAllStatus() {
-        return statusRepository.findAll();
+        log.info("Запрос на получение всех статусов");
+        List<Status> statuses = statusRepository.findAll();
+        log.info("Найдено {} статусов", statuses.size());
+        return statuses;
     }
 
     @Operation(summary = "Добавить новый статус")
     @PostMapping("/status")
     public Status addStatus(@RequestBody NewStatusPayload status) {
+        log.info("Создание нового статуса: {}", status.name());
         Status newStatus = new Status();
         newStatus.setName(status.name());
-        return statusRepository.save(newStatus);
+        Status savedStatus = statusRepository.save(newStatus);
+        log.info("Статус успешно создан с ID: {}", savedStatus.getId());
+        return savedStatus;
     }
 
     @Operation(summary = "Обновить существующий статус по ID")
@@ -72,12 +83,15 @@ public class KanbanBoardController {
     @Operation(summary = "Добавить новую задачу")
     @PostMapping("/task")
     public Task addTask(@RequestBody NewTaskPayload payload) {
+        log.info("Создание новой задачи: {}", payload.title());
         Task task = new Task();
         task.setTitle(payload.title());
         task.setDescription(payload.description());
         task.setStatus(statusRepository.findById(payload.status_id()).get());
         task.setOwnerId(payload.owner());
-        return taskRepository.save(task);
+        Task savedTask = taskRepository.save(task);
+        log.info("Задача успешно создана с ID: {}", savedTask.getId());
+        return savedTask;
     }
 
     @Operation(summary = "Обновить статус задачи")
