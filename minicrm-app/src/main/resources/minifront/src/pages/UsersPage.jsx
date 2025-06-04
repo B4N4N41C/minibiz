@@ -25,6 +25,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 import NavBar from '../components/NavBar.jsx'
+import { useNotification } from '../services/useNotification.jsx';
 
 const UsersPage = () => {
   const [users, setUsers] = useState([]);
@@ -33,6 +34,7 @@ const UsersPage = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
+  const { showNotification, Notification } = useNotification();
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -54,13 +56,10 @@ const UsersPage = () => {
       setLoading(true);
       const { data } = await axios.get("/users");
       setUsers(data);
+
     } catch (error) {
       console.error("Error fetching users:", error);
-      setSnackbar({
-        open: true,
-        message: "Failed to fetch users",
-        severity: "error",
-      });
+
     } finally {
       setLoading(false);
     }
@@ -116,40 +115,26 @@ const UsersPage = () => {
           email: formData.email,
           password: formData.password
         });
-        setSnackbar({
-          open: true,
-          message: "Пользователь зарегистрирован",
-          severity: "success",
-        });
+        showNotification('Пользователь успешно создан', 'success');
       }
       fetchUsers();
       setOpenDialog(false);
     } catch (error) {
       console.error("Ошибка:", error);
-      setSnackbar({
-        open: true,
-        message: error.response?.data?.message || "Ошибка операции",
-        severity: "error",
-      });
+      const errorMessage = error.response?.data?.message || 'Ошибка при создании пользователя';
+      showNotification(errorMessage);
     }
   };
 
   const handleDelete = async () => {
     try {
       await axios.delete(`/users/${userToDelete.id}`);
-      setSnackbar({
-        open: true,
-        message: "User deleted successfully",
-        severity: "success",
-      });
+      showNotification('Пользователь успешно удалён', 'success');
       fetchUsers();
     } catch (error) {
       console.error("Error deleting user:", error);
-      setSnackbar({
-        open: true,
-        message: "Error deleting user",
-        severity: "error",
-      });
+      const errorMessage = error.response?.data?.message || 'Ошибка при создании пользователя';
+      showNotification(errorMessage);
     } finally {
       setOpenDeleteDialog(false);
     }
@@ -288,6 +273,7 @@ const UsersPage = () => {
         </Alert>
       </Snackbar>
     </Box>
+    <Notification />
     </>
   );
 };

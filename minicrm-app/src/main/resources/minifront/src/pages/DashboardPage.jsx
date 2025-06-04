@@ -16,12 +16,14 @@ import {
 import axios from "axios";
 import NavBar from "../components/NavBar";
 import { useStore } from "../stores/mainStore";
+import { useNotification } from '../services/useNotification.jsx';
 
 const DashboardPage = () => {
   const [statistics, setStatistics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { moduleth } = useStore();
+  const { showNotification, Notification } = useNotification();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,9 +31,12 @@ const DashboardPage = () => {
         const response = await axios.get("/api/statistics/dashboard");
         setStatistics(response.data);
         setLoading(false);
+        showNotification('Статистика загружена', 'success');
       } catch (err) {
         setError(err.message);
         setLoading(false);
+        const errorMessage = error.response?.data?.message || 'Ошибка при загрузки статистики';
+        showNotification(errorMessage);
       }
     };
 
@@ -145,6 +150,7 @@ const DashboardPage = () => {
             )}
           </Grid2>
         </Box>
+        <Notification />
       </>
   );
 };

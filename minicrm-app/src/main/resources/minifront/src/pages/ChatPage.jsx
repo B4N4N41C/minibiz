@@ -21,6 +21,7 @@ import {
 import NavBar from "../components/NavBar.jsx";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useNotification } from '../services/useNotification.jsx';
 
 var stompClient = null;
 const ChatPage = () => {
@@ -30,6 +31,7 @@ const ChatPage = () => {
   const [newChatName, setNewChatName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
+  const { showNotification, Notification } = useNotification();
   const [userData, setUserData] = useState({
     username: Cookies.get("Username"),
     receivername: "",
@@ -167,8 +169,11 @@ const ChatPage = () => {
         getAllChatRoom();
         handleCloseModal();
       }
+      showNotification('Успешно создана комната', 'success');
     } catch (error) {
       console.error("Error creating chat:", error);
+      const errorMessage = error.response?.data?.message || 'Ошибка при создание комнаты';
+      showNotification(errorMessage);
     }
   };
 
@@ -347,6 +352,7 @@ const ChatPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Notification />
     </>
   );
 };

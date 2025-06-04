@@ -22,6 +22,7 @@ import AddIcon from "@mui/icons-material/Add";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import NavBar from "../components/NavBar";
 import axios from "axios";
+import { useNotification } from '../services/useNotification.jsx';
 
 import Cookies from 'js-cookie';
 
@@ -45,6 +46,7 @@ const KanbanBoardPage = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
+  const { showNotification, Notification } = useNotification();
 
   const fetchUsers = async () => {
     try {
@@ -169,12 +171,15 @@ const KanbanBoardPage = () => {
           users.find((u) => u.username === Cookies.get("Username"))?.id
         ),
       });
+      showNotification('Задача успешно создана', 'success');
       fetchTasks();
       setNewTaskTitle("");
       setNewTaskDescription("");
       setIsAddingTask(false);
     } catch (error) {
       console.error("Error adding task:", error);
+      const errorMessage = error.response?.data?.message || 'Ошибка при создании задачи';
+      showNotification(errorMessage);
     }
   };
 
@@ -565,6 +570,7 @@ const KanbanBoardPage = () => {
           </Box>
         </Box>
       </Drawer>
+      <Notification />
     </>
   );
 };
