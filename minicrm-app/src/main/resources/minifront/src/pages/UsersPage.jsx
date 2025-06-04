@@ -173,7 +173,7 @@ const UsersPage = () => {
                 <TableCell>ID</TableCell>
                 <TableCell>Имя</TableCell>
                 <TableCell>Почта</TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell align="right">Действия</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -204,7 +204,7 @@ const UsersPage = () => {
       )}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>
-          {currentUser ? "Edit User" : "Add New User"}
+          {currentUser ? "Редактировать пользователя" : "Создать пользователя"}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ mt: 2 }}>
@@ -238,7 +238,7 @@ const UsersPage = () => {
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
           <Button onClick={handleSubmit} variant="contained">
-            {currentUser ? "Update" : "Create"}
+            {currentUser ? "Обновить" : "Создать"}
           </Button>
         </DialogActions>
       </Dialog>
@@ -249,13 +249,13 @@ const UsersPage = () => {
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete user "{userToDelete?.username}"?
+            Вы действительно хотите удалить пользователя "{userToDelete?.username}"?
           </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDeleteDialog(false)}>Cancel</Button>
           <Button onClick={handleDelete} color="error" variant="contained">
-            Delete
+            Удалить
           </Button>
         </DialogActions>
       </Dialog>

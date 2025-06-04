@@ -119,7 +119,7 @@ const DashboardPage = () => {
                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                             ))}
                           </Pie>
-                          <Tooltip formatter={(value) => [`${value} tasks`, "Count"]} />
+                          <Tooltip formatter={(value) => [`${value} сделок`, "Число"]} />
                           <Legend />
                         </PieChart>
                       </ResponsiveContainer>
@@ -139,7 +139,7 @@ const DashboardPage = () => {
                           <CartesianGrid strokeDasharray="3 3" />
                           <XAxis dataKey="username" />
                           <YAxis />
-                          <Tooltip formatter={(value) => [`${value} ₽`, "Revenue"]} />
+                          <Tooltip formatter={(value) => [`${value} ₽`, "Прибыль"]} />
                           <Legend />
                           <Bar dataKey="profit" fill="#82ca9d" name="Прибыль (₽)" />
                         </BarChart>

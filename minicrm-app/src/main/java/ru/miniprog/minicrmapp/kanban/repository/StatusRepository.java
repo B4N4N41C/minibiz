@@ -46,7 +46,10 @@ public class StatusRepository {
     }
 
     public void deleteById(Long id) {
-        String sql = "DELETE FROM status WHERE id = ?";
-        jdbcTemplate.update(sql, id);
+        String sqlTask = "DELETE FROM task WHERE status_id = ?";
+        jdbcTemplate.update(sqlTask, id);
+
+        String sqlStatus = "DELETE FROM status WHERE id = ?";
+        jdbcTemplate.update(sqlStatus, id);
     }
 }

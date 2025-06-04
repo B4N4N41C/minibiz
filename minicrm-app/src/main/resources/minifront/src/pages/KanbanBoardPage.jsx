@@ -57,6 +57,19 @@ const KanbanBoardPage = () => {
     }
   };
 
+  const deleteTask = async () => {
+    try {
+      await axios.delete(`/kanban/task/${selectedTask.id}`);
+      showNotification('Задача успешно удалена', 'success');
+      fetchTasks();
+      closeTaskDrawer();
+    } catch (error) {
+      console.error("Error deleting task:", error);
+      const errorMessage = error.response?.data?.message || 'Ошибка при удалении задачи';
+      showNotification(errorMessage);
+    }
+  };
+
   const fetchStatus = async () => {
     try {
       const { data } = await axios.get("/kanban/status");
@@ -344,13 +357,13 @@ const KanbanBoardPage = () => {
                     variant="contained"
                     onClick={() => addTask(column.id)}
                   >
-                    Add Task
+                    Добавить сделку
                   </Button>
                   <Button
                     variant="outlined"
                     onClick={() => setIsAddingTask(false)}
                   >
-                    Cancel
+                    Отмена
                   </Button>
                 </>
               ) : (
@@ -362,7 +375,7 @@ const KanbanBoardPage = () => {
                   }}
                   sx={{ width: "100%", height: "50px" }}
                 >
-                  Add Task
+                  Добавить сделку
                 </Button>
               )}
             </Box>
@@ -397,7 +410,7 @@ const KanbanBoardPage = () => {
                 sx={{ marginBottom: 2, width: "100%" }}
               />
               <Button variant="contained" onClick={addColumn}>
-                Add Column
+                Добавить статус
               </Button>
               <Button
                 variant="outlined"
@@ -406,14 +419,14 @@ const KanbanBoardPage = () => {
                   setIsAddingColumn(false);
                 }}
               >
-                Cancel
+                Отмена
               </Button>
             </>
           ) : (
             <>
               <AddIcon sx={{ fontSize: 40, color: "grey" }} />
               <Typography variant="body1" color="grey">
-                Add Column
+                Добавить статус
               </Typography>
             </>
           )}
@@ -430,24 +443,24 @@ const KanbanBoardPage = () => {
           }}
         >
           <Tabs value={activeTab} onChange={handleTabChange}>
-            <Tab label="Details" />
-            <Tab label="Notes" />
+            <Tab label="Детали" />
+            <Tab label="Заметки" />
           </Tabs>
 
           {activeTab === 0 && (
             <Box sx={{ flexGrow: 1 }}>
               <Typography variant="h6" component="h6" sx={{ mt: 2 }}>
-                Edit Task
+                Редактировать сделку
               </Typography>
               <TextField
-                label="Task Title"
+                label="Название"
                 value={editedTaskTitle}
                 onChange={(e) => setEditedTaskTitle(e.target.value)}
                 sx={{ marginBottom: 2, mt: 2 }}
                 fullWidth
               />
               <TextField
-                label="Task Description"
+                label="Описание"
                 value={editedTaskDescription}
                 onChange={(e) => setEditedTaskDescription(e.target.value)}
                 sx={{ marginBottom: 2 }}
@@ -456,7 +469,7 @@ const KanbanBoardPage = () => {
                 rows={4}
               />
               <TextField
-                label="Profit (₽)"
+                label="Прибыль (₽)"
                 type="number"
                 value={selectedTask?.profit || ""}
                 onChange={(e) =>
@@ -475,14 +488,21 @@ const KanbanBoardPage = () => {
               />
               <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
                 <Button
+                    variant="contained"
+                    color="error"
+                    onClick={deleteTask}
+                >
+                  Удалить
+                </Button>
+                <Button
                   variant="outlined"
                   onClick={closeTaskDrawer}
                   sx={{ mr: 2 }}
                 >
-                  Cancel
+                  Отмена
                 </Button>
                 <Button variant="contained" onClick={updateTask}>
-                  Save
+                  Сохранить
                 </Button>
               </Box>
             </Box>
@@ -491,7 +511,7 @@ const KanbanBoardPage = () => {
           {activeTab === 1 && (
             <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
               <Typography variant="h6" component="h6" sx={{ mt: 2 }}>
-                Task Notes
+                Заметки
               </Typography>
               <List sx={{ flexGrow: 1, overflowY: "auto", mb: 2 }}>
                 {notes.map((note) => (
@@ -523,7 +543,7 @@ const KanbanBoardPage = () => {
                   disabled={!newNote.trim()}
                   sx={{ height: "56px" }}
                 >
-                  Send
+                  Отправить
                 </Button>
               </Box>
             </Box>
@@ -537,7 +557,7 @@ const KanbanBoardPage = () => {
       >
         <Box sx={{ width: 380, padding: 2 }}>
           <Typography variant="h6" component="h6">
-            Edit Column
+            Редактировать статус
           </Typography>
           <TextField
             label="Column Name"
@@ -553,7 +573,7 @@ const KanbanBoardPage = () => {
               onClick={deleteColumn}
               sx={{ mr: 2 }}
             >
-              Delete Column
+              Удалить колонку
             </Button>
             <Box>
               <Button
@@ -561,10 +581,10 @@ const KanbanBoardPage = () => {
                 onClick={closeColumnDrawer}
                 sx={{ mr: 2 }}
               >
-                Cancel
+                Отмена
               </Button>
               <Button variant="contained" onClick={updateColumn}>
-                Save
+                Сохранить
               </Button>
             </Box>
           </Box>

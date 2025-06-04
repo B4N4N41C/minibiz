@@ -112,4 +112,10 @@ public class KanbanBoardController {
     public Note addNotes(@RequestBody NewNote note) {
         return noteRepository.save(new Note(null, note.message(), note.task_id(), new Date()));
     }
+
+    @Operation(summary = "Удалить задачу по ID")
+    @DeleteMapping("/task/{id}")
+    public void deleteTask(@PathVariable Long id) {
+        taskRepository.deleteById(id);
+    }
 }

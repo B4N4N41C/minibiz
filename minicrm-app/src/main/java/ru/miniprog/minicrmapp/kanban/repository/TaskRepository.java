@@ -73,4 +73,12 @@ public class TaskRepository {
         Long statusId = jdbcTemplate.queryForObject(sql, Long.class, task.getId());
         task.setStatus(statusRepository.findById(statusId).orElse(null));
     }
+
+    public void deleteById(Long id) {
+        String deleteNotesSql = "DELETE FROM note WHERE task_id = ?";
+        jdbcTemplate.update(deleteNotesSql, id);
+
+        String sql = "DELETE FROM task WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
 }
