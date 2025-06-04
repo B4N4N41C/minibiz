@@ -79,9 +79,11 @@ const ChatPage = () => {
       console.error("Error fetching users:", error);
     }
   };
+  const urlParams = window.location.host;
+
 
   const connect = () => {
-    let Sock = new SockJS("http://localhost:8080/ws");
+    let Sock = new SockJS(`http://${urlParams}/ws`);
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
   };
@@ -307,7 +309,7 @@ const ChatPage = () => {
                 onClick={sendPrivateValue}
                 sx={{ ml: 2 }}
               >
-                Send
+                Отправить
               </Button>
             </Box>
           </Box>
