@@ -62,7 +62,7 @@ public class TaskRepository {
                     task.getCreatedAt(),
                     task.getProfit(),
                     task.getOwnerId(),
-                    task.getStatus().getId( ),
+                    task.getStatus().getId(),
                     task.getId());
         }
         return task;

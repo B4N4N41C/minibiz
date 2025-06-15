@@ -82,6 +82,9 @@ public class UserRepository {
     }
 
     public void deleteById(Long id) {
+        String deleteRelationsSql = "DELETE FROM chat_room_users WHERE users_id = ?";
+        jdbcTemplate.update(deleteRelationsSql, id);
+
         String sql = "DELETE FROM user_crm WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }

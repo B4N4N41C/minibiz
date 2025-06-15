@@ -15,6 +15,7 @@ import com.nimbusds.jose.jwk.OctetSequenceKey;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -66,13 +67,16 @@ public class SecurityConfiguration {
                 http.formLogin(form -> form
                                 .defaultSuccessUrl("/", true)
                                 .permitAll())
-//                                .addFilterAfter(new GetCsrfTokenFilter(), ExceptionTranslationFilter.class)
+                                // .addFilterAfter(new GetCsrfTokenFilter(), ExceptionTranslationFilter.class)
                                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                                                 .requestMatchers("/api/login").permitAll()
                                                 .requestMatchers("/swagger-ui/**", "/swagger-resources/*",
                                                                 "/v3/api-docs/**")
                                                 .permitAll()
-                                                .requestMatchers("/admin/**", "/kanban/**").hasRole("ADMIN")
+                                                .requestMatchers("/api/statistics/**").hasRole("ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+                                                .requestMatchers(HttpMethod.PATCH, "/users/**").hasRole("ADMIN")
+                                                .requestMatchers(HttpMethod.POST, "/users/**").hasRole("ADMIN")
                                                 .anyRequest().authenticated())
                                 .sessionManagement(sessionManagement -> sessionManagement
                                                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
