@@ -1,19 +1,20 @@
 package ru.miniprog.minicrmapp.users.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import ru.miniprog.minicrmapp.users.repository.UserRepository;
 import ru.miniprog.minicrmapp.users.model.Role;
 import ru.miniprog.minicrmapp.users.model.UserCrm;
+import ru.miniprog.minicrmapp.users.repository.UserRepository;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
     private final UserRepository repository;
+
+    public UserService(UserRepository repository) {
+        this.repository = repository;
+    }
 
     /**
      * Сохранение пользователя

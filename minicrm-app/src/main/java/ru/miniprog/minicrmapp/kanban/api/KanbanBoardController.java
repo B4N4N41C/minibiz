@@ -1,11 +1,9 @@
 package ru.miniprog.minicrmapp.kanban.api;
 
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import ru.miniprog.minicrmapp.chat.api.ChatController;
 import ru.miniprog.minicrmapp.kanban.api.payload.*;
 import ru.miniprog.minicrmapp.kanban.model.Note;
 import ru.miniprog.minicrmapp.kanban.model.Status;
@@ -19,7 +17,6 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/kanban")
 public class KanbanBoardController {
 
@@ -29,6 +26,13 @@ public class KanbanBoardController {
     private final NoteRepository noteRepository;
 
     Logger log = LoggerFactory.getLogger(KanbanBoardController.class);
+
+    public KanbanBoardController(StatusRepository statusRepository, KanbanService kanbanService, TaskRepository taskRepository, NoteRepository noteRepository) {
+        this.statusRepository = statusRepository;
+        this.kanbanService = kanbanService;
+        this.taskRepository = taskRepository;
+        this.noteRepository = noteRepository;
+    }
 
     @Operation(summary = "Получить список всех статусов")
     @GetMapping("/status")

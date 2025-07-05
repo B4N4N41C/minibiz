@@ -1,6 +1,5 @@
 package ru.miniprog.minicrmapp.kanban.repository;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.miniprog.minicrmapp.kanban.mapper.NoteMapper;
@@ -9,10 +8,14 @@ import ru.miniprog.minicrmapp.kanban.model.Note;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 public class NoteRepository {
     private final JdbcTemplate jdbcTemplate;
     private final NoteMapper noteMapper;
+
+    public NoteRepository(JdbcTemplate jdbcTemplate, NoteMapper noteMapper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.noteMapper = noteMapper;
+    }
 
     public List<Note> findByTaskId(long taskId) {
         String sql = "SELECT * FROM note WHERE task_id = ?";

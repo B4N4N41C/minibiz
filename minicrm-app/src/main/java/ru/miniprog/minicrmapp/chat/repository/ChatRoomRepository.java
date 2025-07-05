@@ -2,8 +2,6 @@ package ru.miniprog.minicrmapp.chat.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import lombok.RequiredArgsConstructor;
 import ru.miniprog.minicrmapp.chat.mapper.ChatRoomMapper;
 import ru.miniprog.minicrmapp.chat.model.ChatRoom;
 import ru.miniprog.minicrmapp.users.model.UserCrm;
@@ -13,16 +11,22 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
 public class ChatRoomRepository {
     private final JdbcTemplate jdbcTemplate;
     private final UserRepository userRepository;
     private final ChatRoomMapper chatRoomMapper;
 
+    public ChatRoomRepository(JdbcTemplate jdbcTemplate, UserRepository userRepository, ChatRoomMapper chatRoomMapper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.userRepository = userRepository;
+        this.chatRoomMapper = chatRoomMapper;
+    }
+
 
     public List<ChatRoom> findByUsers_UsernameIgnoreCase(String username) {
         String sql = """
-            SELECT cr.* FROM chat_room cr
+            
+                SELECT cr.* FROM chat_room cr
             JOIN chat_room_users cru ON cr.id = cru.chat_rooms_id
             JOIN user_crm u ON cru.users_id = u.id
             WHERE LOWER(u.username) = LOWER(?)
@@ -51,11 +55,14 @@ public class ChatRoomRepository {
     }
 
     private void loadUsers(ChatRoom chatRoom) {
-        String sql = """
-            SELECT u.* FROM user_crm u
-            JOIN chat_room_users cru ON u.id = cru.users_id
-            WHERE cru.chat_rooms_id = ?
-            """;
+        String sql =
+                """
+                        SELECT u.*
+                            FROM user_crm u
+                        JOIN chat_room_users
+                            cru ON u.id = cru.users_id
+                                     WHERE cru.chat_rooms_id = ?
+                        """;
         List<UserCrm> users = jdbcTemplate.query(sql, userRepository.getUserRowMapper(), chatRoom.getId());
         chatRoom.setUsers(users);
     }

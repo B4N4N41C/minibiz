@@ -1,23 +1,27 @@
 package ru.miniprog.minicrmapp.statistics.service;
 
 import org.springframework.stereotype.Service;
+import ru.miniprog.minicrmapp.chat.repository.MessageRepository;
 import ru.miniprog.minicrmapp.kanban.model.Task;
+import ru.miniprog.minicrmapp.kanban.repository.TaskRepository;
 import ru.miniprog.minicrmapp.statistics.model.StatisticsResponse;
 import ru.miniprog.minicrmapp.statistics.model.UserStatistics;
 import ru.miniprog.minicrmapp.users.repository.UserRepository;
-import ru.miniprog.minicrmapp.chat.repository.MessageRepository;
-import ru.miniprog.minicrmapp.kanban.repository.TaskRepository;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class StatisticsService {
 
     private final UserRepository userRepository;
     private final MessageRepository messageRepository;
     private final TaskRepository taskRepository;
+
+    public StatisticsService(UserRepository userRepository, MessageRepository messageRepository, TaskRepository taskRepository) {
+        this.userRepository = userRepository;
+        this.messageRepository = messageRepository;
+        this.taskRepository = taskRepository;
+    }
 
     public StatisticsResponse getDashboardStatistics() {
         var users = userRepository.findAll();
